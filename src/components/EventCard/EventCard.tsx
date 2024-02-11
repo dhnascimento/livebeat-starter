@@ -16,8 +16,8 @@ const EventCard = ({ date, image, location, name }: EventCardProps) => {
       <div className="relative">
         {image?.url && (
           <img
-            width={800}
-            height={450}
+            width={image.width}
+            height={image.height}
             src={image.url}
             alt={image.alt}
           />

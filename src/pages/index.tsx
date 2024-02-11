@@ -1,12 +1,24 @@
 import { Link } from 'wouter';
-
+import { getEvents } from '@/lib/events';
+import { getPreviewImageById } from '@/lib/storage';
+import { LiveBeatEvent } from '@/types/events';
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import Container from '@/components/Container';
 import EventCard from '@/components/EventCard';
 
-import events from '@/data/events.json';
-
 function Home() {
+
+  const [events, setEvents] = useState<Array<LiveBeatEvent> | undefined >();
+
+  useEffect(() => {
+    (async function run () {
+      const { events } = await getEvents();
+      setEvents(events);
+    })()
+
+  }, []);
+
   return (
     <Layout>
       {Array.isArray(events) && events.length > 0 && (
@@ -28,14 +40,14 @@ function Home() {
             <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => {
                 return (
-                  <Link key={event.name} href="/event/1234">
+                  <Link key={event.$id} href={`/event/${event.$id}`}>
                     <a>
                       <EventCard
                         date={event.date}
                         image={{
                           alt: '',
                           height: event.imageHeight,
-                          url: event.imageUrl,
+                          url: event?.imageFileId && getPreviewImageById(event.imageFileId),
                           width: event.imageWidth
                         }}
                         location={event.location}
