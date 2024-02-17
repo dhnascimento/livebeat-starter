@@ -7,6 +7,15 @@ export async function logIn(email: string) {
 }
 
 export async function verifySession(userId: string, secret: string) {
+    console.log({userId, secret})
     const data = await account.updateMagicURLSession(userId, secret);
     return data;
 }
+
+export async function getCurrentSession() {
+    const session = await account.getSession('current');
+    console.log(session);
+    return {
+        session
+    }
+}   
