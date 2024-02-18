@@ -18,4 +18,8 @@ export async function getCurrentSession() {
     return {
         session
     }
+}
+
+export async function deleteCurrentSession() {
+    await account.deleteSession('current');
 }   

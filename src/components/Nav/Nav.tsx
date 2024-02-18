@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Models } from 'appwrite';
 import { Link } from 'wouter';
 import Container from '@/components/Container';
-import { getCurrentSession } from '@/lib/auth';
+import { getCurrentSession, deleteCurrentSession } from '@/lib/auth';
 
 const Nav = () => {
   const [session, setSession] = useState<Models.Session>();
@@ -13,7 +13,12 @@ const Nav = () => {
       setSession(data.session)
     })();
   }, []);
-  
+
+  async function handleOnLogout() {
+    await deleteCurrentSession();
+    setSession(undefined);
+  }
+
   return (
     <nav>
       <Container className="py-16">
@@ -24,7 +29,7 @@ const Nav = () => {
         </p>
         <p className="flex justify-center gap-4">
           {session && (
-            <button className="font-medium hover:text-[#535bf2] cursor-pointer">Log Out</button>  
+            <button className="font-medium hover:text-[#535bf2] cursor-pointer" onClick={handleOnLogout}>Log Out</button>  
           )}
           {!session && (
             <Link href="/login">
