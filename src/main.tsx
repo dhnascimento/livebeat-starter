@@ -8,6 +8,8 @@ import Session from '@/pages/session';
 import EventsNew from '@/pages/events/new';
 import Event from '@/pages/event/[eventId]';
 
+import { AuthProvider } from './hooks/use-auth';
+
 import '@/styles/global.css'
 
 const Router = () => {
@@ -24,6 +26,8 @@ const Router = () => {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Router />
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
   </React.StrictMode>,
 )

@@ -1,4 +1,5 @@
 import { Link } from 'wouter';
+import { useAuth } from '@/hooks/use-auth';
 import { getEvents } from '@/lib/events';
 import { getPreviewImageById } from '@/lib/storage';
 import { LiveBeatEvent } from '@/types/events';
@@ -8,14 +9,14 @@ import Container from '@/components/Container';
 import EventCard from '@/components/EventCard';
 
 function Home() {
-
+  const { session } = useAuth();
   const [events, setEvents] = useState<Array<LiveBeatEvent> | undefined >();
 
   useEffect(() => {
     (async function run () {
       const { events } = await getEvents();
       setEvents(events);
-    })()
+    })();
 
   }, []);
 
@@ -27,13 +28,15 @@ function Home() {
             <h1 className="text-lg font-bold uppercase text-slate-600 dark:text-slate-200">
               Upcoming Events
             </h1>
-            <p>
-              <Link href="/events/new">
-                <a className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
-                  Add Event
-                </a>
-              </Link>
-            </p>
+            {session && (
+              <p>
+                <Link href="/events/new">
+                  <a className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
+                    Add Event
+                  </a>
+                </Link>
+              </p>
+            )}
           </Container>
           
           <Container>
