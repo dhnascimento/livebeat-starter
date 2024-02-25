@@ -11,7 +11,6 @@ export interface VerifySessionOptions {
 }
 
 export async function verifySession({ userId, secret }: VerifySessionOptions) {
-    console.log({userId, secret})
     const data = await account.updateMagicURLSession(userId, secret);
     return data;
 }

@@ -6,12 +6,14 @@ import Button from '@/components/Button';
 
 import { getEventById, deleteEventById } from '@/lib/events';
 import { getPreviewImageById } from '@/lib/storage';
+import { useAuth } from '@/hooks/use-auth';
 import { LiveBeatEvent } from '@/types/events';
 
 function Event({ params }: { params: { eventId: string }}) {
   const [, navigate] = useLocation();
   const [event, setEvent] = useState<LiveBeatEvent | undefined>();
-  
+  const { isAdmin } = useAuth();
+   
   const imageUrl = event?.imageFileId && getPreviewImageById(event.imageFileId);
 
   const image = {
@@ -61,9 +63,11 @@ function Event({ params }: { params: { eventId: string }}) {
               <p className="text-lg font-medium text-neutral-600 dark:text-neutral-200">
                 <strong>Location:</strong> { event?.location }
               </p>
+              {isAdmin && (
               <p className="mt-6">
-                <Button color="red" onClick={handleOnDeleteEvent}>Delete Event</Button>
-              </p>
+              <Button color="red" onClick={handleOnDeleteEvent}>Delete Event</Button>
+            </p>
+              )}
             </>
           )}
         </div>
