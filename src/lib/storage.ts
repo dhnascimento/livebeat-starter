@@ -13,5 +13,5 @@ export async function deleteFileById(fileId: string) {
 
 
 export function getPreviewImageById(fileId: string) {
-    return storage.getFilePreview(import.meta.env.VITE_APPWRITE_EVENTS_BUCKET_IMAGES_ID, fileId);
+    return storage.getFilePreview(import.meta.env.VITE_APPWRITE_EVENTS_BUCKET_IMAGES_ID, fileId).toString();
 }   
