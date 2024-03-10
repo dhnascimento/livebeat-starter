@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 // import { verifySession } from '@/lib/auth';
+import { AppwriteException } from 'appwrite';
 import { useAuth } from '@/hooks/use-auth';
 import useLocation from 'wouter/use-location';
 import Container from '@/components/Container';
@@ -18,11 +19,16 @@ function Session() {
     }
 
     (async function run() {
-      await verifySession({userId, secret});
-      navigate('/');
+      try {
+        await verifySession({userId, secret});
+        navigate('/');
+      } catch (error) {
+        if (error instanceof AppwriteException) {
+          navigate(`/login?error=${error.type}`);
+        }
+      }
     })();
-
-  });
+  }, []);
 
   return (
     <Container className="h-screen flex items-center justify-center text-center">

@@ -10,6 +10,7 @@ import InputFile from '@/components/InputFile';
 import Button from '@/components/Button';
 import { createEvent } from '@/lib/events';
 import { uploadFile } from '@/lib/storage';
+import { AppwriteException } from 'appwrite';
 
 interface LiveBeatImage {
   height: number;
@@ -20,7 +21,7 @@ interface LiveBeatImage {
 
 function EventNew() {
   const [, navigate] = useLocation();
-  const [error] = useState<string>();
+  const [error, setError] = useState<string>();
   const [image, setImage] = useState<LiveBeatImage>();
 
   function handleOnChange(event:React.FormEvent<HTMLInputElement>) {
@@ -46,6 +47,8 @@ function EventNew() {
   async function handleOnSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
+    try {
+
     const target = e.target as typeof e.target & {
       name: { value: string },  
       location: { value: string },
@@ -69,6 +72,14 @@ function EventNew() {
 
 
     navigate(`/event/${result.event.$id}`);
+    } catch (error: unknown) {
+      if (error instanceof AppwriteException) {
+        if (error.type === 'user_unauthorized') {
+          setError('You must be logged in to submit an event.');
+        }
+      }
+    }
+
   }
 
   return (
